@@ -1,0 +1,16 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: driver}
+spec:
+  replicas: 1
+  selector: {matchLabels: {component: driver}}
+  template:
+    metadata: {labels: {component: driver}}
+    spec:
+      containers:
+        - name: scratch
+          image: localhost:32000/cuda-gdb-bug:latest
+          command: [ "/bin/bash", "-c", "--" ]
+          args: [ "while true; do sleep 30; done;" ]
+          env: [{name: POD_IP, valueFrom: {fieldRef: {fieldPath: status.podIP}}}]
+          resources: {limits: {nvidia.com/gpu: 1}}

@@ -1,0 +1,26 @@
+ninja_required_version = 1.3
+cxx = c++
+nvcc = /usr/local/cuda/bin/nvcc
+
+cuda_flags = $
+    -isystem /opt/conda/lib/python3.7/site-packages/torch/include $
+    -isystem /usr/local/cuda/include $
+    -D_GLIBCXX_USE_CXX11_ABI=0
+ldflags = $
+    -L/opt/conda/lib/python3.7/site-packages/torch/lib -ltorch -lc10_cuda -lc10 $
+    -Wl,-rpath,/opt/conda/lib/python3.7/site-packages/torch/lib $
+    -L/usr/local/cuda/lib64 -lcudart
+
+rule cuda_compile
+  command = $nvcc $cuda_flags -c $in -o $out
+
+rule link
+  command = $cxx $in $ldflags -o $out
+
+build good.cuda.o: cuda_compile good.cu
+build bad.cuda.o: cuda_compile bad.cu
+
+build good: link good.cuda.o
+build bad: link bad.cuda.o
+
+default good bad
