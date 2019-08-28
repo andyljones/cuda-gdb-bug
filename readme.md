@@ -1,3 +1,5 @@
+**This is fixed as of CUDA toolkit 10.1.243**
+
 This repo has a minimal example of a cuda-gdb/PyTorch bug. The bug is that when running a PyTorch program in cuda-gdb, it crashes with a 
 ```
 cuda-gdb/7.12/gdb/block.c:456: internal-error: set_block_compunit_symtab: Assertion `gb->compunit_symtab == NULL' failed.
